@@ -1,0 +1,30 @@
+{
+    "debug.node.autoAttach": "off",
+    "cSpell.enabled": false,
+    "liveServer.settings.port": 5502,
+    "problems.autoReveal": false,
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "cSpell.ignoreWords": [
+      "",
+      "pson",
+      "style"
+    ],
+    "typeAcquisition": {
+        "include": [
+          "three"
+        ]
+      },
+      "compilerOptions": {
+        "target": "ES6",
+        "module": "es6"
+      },
+      "exclude": [
+        "js/OpenGL/THREE/three.min.js",
+        "js/build-min",
+        "js/vendor",
+        "node_modules"
+      ],
+      "cSpell.words": [
+        "pson"
+      ]
+}
