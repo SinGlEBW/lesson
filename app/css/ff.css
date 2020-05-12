@@ -1,0 +1,36 @@
+.rpwe-title {
+  font-size: 14px !important;
+  margin: 2px 0 0 0 !important;
+}
+
+.rpwe-title {
+  font-size: 14px !important;
+  margin: 2px 0 0 0 !important;
+}
+
+.site-footer, .two {
+  bottom: 10px;
+  right: 10px;
+}
+
+.site-footer-item {
+  right: 0;
+  margin: 0;
+}
+
+div {
+  width: 100px;
+}
+
+div:hover {
+  margin: 20px;
+}
+
+.two {
+  border-radius: 20px;
+  margin: 10px;
+  top: 10px;
+  bottom: 10px;
+  margin: 0;
+  padding: 0;
+}
