@@ -114,7 +114,8 @@ var o3 = {
 	this.city = city;
 	},
 	method2(){},//ES6 
-	method3: () => {}//ES6 все новые способы вызова функций не имеют prototype и constructor
+	method3: () => {},//ES6 все новые способы вызова функций не имеют prototype и constructor
+	method4 = () => {}
 }
 
 o3.method11 = function (name, age, city){//в разделе method отсутствует имя. Можно задать имя, оно появиться. Метод созданый вне объекта без имени через dir остаёться anonymous

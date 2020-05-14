@@ -2,7 +2,7 @@ const gulp = require('gulp'),
       sass = require('gulp-sass'),
       autoprefixer = require('gulp-autoprefixer'),
       rename = require('gulp-rename'),
-      browserSync = require('browser-sync'),
+      browserSync = require('browser-sync').create(),
       concat = require('gulp-concat'),
       uglify = require('gulp-uglify'),//ужимает js
       babel = require('gulp-babel');
@@ -14,6 +14,39 @@ const gulp = require('gulp'),
   '@babel/preset-react' - транспилирует JSX в ES6
 
 */  
+const colors = {
+  Reset: "\x1b[0m",
+  Bright: "\x1b[1m",
+  Dim: "\x1b[2m",
+  Underscore: "\x1b[4m",
+  Blink: "\x1b[5m",
+  Reverse: "\x1b[7m",
+  Hidden: "\x1b[8m",
+  fg: {
+   Black: "\x1b[30m",
+   Red: "\x1b[31m",
+   Green: "\x1b[32m",
+   Yellow: "\x1b[33m",
+   Blue: "\x1b[34m",
+   Magenta: "\x1b[35m",
+   Cyan: "\x1b[36m",
+   White: "\x1b[37m",
+   Crimson: "\x1b[38m" //القرمزي
+  },
+  bg: {
+   Black: "\x1b[40m",
+   Red: "\x1b[41m",
+   Green: "\x1b[42m",
+   Yellow: "\x1b[43m",
+   Blue: "\x1b[44m",
+   Magenta: "\x1b[45m",
+   Cyan: "\x1b[46m",
+   White: "\x1b[47m",
+   Crimson: "\x1b[48m"
+  }
+ };
+
+
 
 gulp.task('nsmpscss', () => {
   return gulp.src([
@@ -35,7 +68,8 @@ gulp.task('smpminjs', () => {
   .pipe(gulp.dest('app/js'))
 })
 
-gulp.task('br-sync', () => {
+gulp.task('default', () => {
+ 
   browserSync.init({
     server: { 
       baseDir: "app",
@@ -45,7 +79,7 @@ gulp.task('br-sync', () => {
       //   extensions: ["html"]
       // }
     },
-    
+    watch: true,
     files: [
       'app/**/**/*.html', 
       'app/Lesson/**/*.php',
@@ -53,7 +87,7 @@ gulp.task('br-sync', () => {
       {
         match: ['app/css/scss/**/*.scss'],
         fn: (event, file) => {
-        
+  
           gulp.src(file.replace(/\\/g,'/'))//scss файл в котором работаем. Если всегда менять пачку файлов то можно скопировать 'app/css/scss/**/*.scss'
           .pipe(sass.sync({outputStyle: "compressed"}).on('error', sass.logError))
           .pipe(autoprefixer({
@@ -66,21 +100,27 @@ gulp.task('br-sync', () => {
           //this.reload()//можно и так
         },
       },
-      {
+      
+      { 
         match: ['app/React/*.jsx'],
         fn: (event, file) => {
-
-          gulp.src(file.replace(/\\/g, '/'))
-          .pipe(babel({presets: ['@babel/preset-react','@babel/preset-env']}))//@babel/preset-env в ES5
-          .pipe(rename({suffix: '.min'}))
-          .pipe(uglify())//uglify c ES6 не очень ладит. uglify-es больше не поддерживаеться Лучше всех terser работает с ES6+ тоже 
-          .pipe(gulp.dest('app/React/js'))
-          .pipe(browserSync.reload({stream: true}))
+         
+            gulp.src(file.replace(/\\/g, '/'))
+            .pipe(babel({presets: ['@babel/preset-react','@babel/preset-env']}))//@babel/preset-env в ES5
+            .on('error', function(err){
+              console.error(`ERROR >> ${err}`);
+              this.emit('end');
+            })//При ошибке в js не разорвёт соединение в browserSync
+            .pipe(rename({suffix: '.min'}))
+            .pipe(uglify())//uglify c ES6 не очень ладит. uglify-es больше не поддерживаеться Лучше всех terser работает с ES6+ тоже 
+            .pipe(gulp.dest('app/React/js'))
+            .pipe(browserSync.reload({stream: true}))
+        
         }
       }
     ],
-    online: false,//при online транслирует в сеть. с гаждетов можно заходить на сайт 
-    //open: 'tunnel',//Local, External - что отображать в строке URL. В Консоли есть выбор
+    online: true,//при online транслирует в сеть. с гаждетов можно заходить на сайт 
+    open: 'external',//Local, External - что отображать в строке URL. В Консоли есть выбор
     notify: false, //скрывает постоянное всплытие browserSync: Connected
     scrollProportionally: false,//убирает постоянный сброс к верху сайта при обновлении
     port: 8080, 
