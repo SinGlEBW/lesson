@@ -74,7 +74,7 @@ gulp.task('default', () => {
     server: { 
       baseDir: "app",
       //index: "/React/index.html",//не работает как ожидалось. ниже параметр startPath
-      directory: true, // показывать список файлов. сам выберу
+      directory: false, // показывать список файлов. сам выберу
       // serveStaticOptions: {
       //   extensions: ["html"]
       // }
@@ -129,7 +129,7 @@ gulp.task('default', () => {
     //   cert: "path-to-custom.crt"
     // },
     //browser: ["google chrome", "firefox"]//какие браузеры открывать
-    //startPath: "React/index.html" //можно указать точное местоположение открываемого файла
+    startPath: "React/index.html" //можно указать точное местоположение открываемого файла
   
   });
 });
