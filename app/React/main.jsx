@@ -5,8 +5,7 @@ function Welcome(props) {
 }
 const element = <Welcome name = 'Алиса' />//такая конструкция в виде тега передаёться в ReactDOM.render в JSX 
 
-
-
+console.dir(React);
 /*----------------------------------------------------------------------------- */
 /* Создали маленький компонент и зарендерили его передав имя */
 class MyClass extends React.Component {
@@ -108,48 +107,48 @@ ReactDOM.render(
 class Input extends React.Component{
     constructor(props){
         super(props)
-        this.method = this.method.bind(this)
-        this.state = {checked: false}
+       
     }
-    method({target}){
-        this.setState({checked:target.checked})
-    }
-    render(){
-        let messege;
+    state = {messege: localStorage.getItem('messege') || 'не выбран'}
+    method = function({target}){
         
-        if(this.state.checked)
-            messege = 'выбран';
-        else
-            messege = 'не выбран';
+        let ch = (target.checked) ? 'выбран' : 'не выбран';
+        this.setState({messege: ch})
+        
+        localStorage.setItem('messege', ch)
+        localStorage.setItem('check', target.checked)
+       
+    }
+    
+    render(){
+        console.dir(this);
         return (
             <div>
-                <input id='check' type="checkbox" onChange={this.method}/>
-                <p>Чекбокс {messege}</p>
-            </div>
-            
+                <input type="checkbox" onChange={this.method} defaultChecked={localStorage.getItem('check')}/>
+                <p>Чекбокс {this.state.flags}</p>
+            </div> 
         )
-    }
+    } 
 }
-
-/*
-    передача компоненту данных это уже можно сказать инициализация экземпляра класса
-*/
+Input.defaultProps = {
+    ff: 'ddfdf',
+    ggg: 'fgf'
+}
 ReactDOM.render(
-    <Input name='df'>ff</Input>,
+    <Input name='Евгений Ваганович'>Какой-то текст</Input>,
     document.querySelector('form')
 )
 
-let input = document.querySelector('button')
-input.click(input.click.bind(input))
-
-
-input.addEventListener('click', (event) =>{
-    console.dir(this);
-})
-
-
 /*-----------------------------------------------------------------------------*/
-
+/*
+    Как я понял есть методы и свойства которые не распознаються но работают
+*/
+/*
+    в копилку знаний. стрелочные функции как и bind лучше не использовать в событиях т.к. при обращении к ним они создают новые функции,
+    и видимо не очищают память.
+    this.method.bind(this) в событии не вариант, присваивать же такую конструкцию в constriction это создавать по сути ещё одну копию метода,
+    как по мне рационально просто создать метод безымяной функции и вызвать bind
+*/
 /*
     Скажем так в нивидимые теги классов тобишь Компонентов нельзя обернуть теги. Так что идея рендерить в body
     по структуре не получиться. Как минимум будет рендер в body с последующей обёрткой div в которую и будут
