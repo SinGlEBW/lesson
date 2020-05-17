@@ -8,12 +8,20 @@ const gulp = require('gulp'),
       babel = require('gulp-babel');
 /*### - О BABEL - ###
   Gulp-babel для непосредственно создания таска
+
   "@babel/core" как я понял это сам процессор транспиляции одного кода в другой
   далее идут библиотеки надстройки для "@babel/core" что требуется прочитать чтоб конвертироваться в js
   '@babel/preset-env' - указывается в опциях. Транспилирует ES2015(ES6) в ES5
   '@babel/preset-react' - транспилирует JSX в ES6
+  плагины
+  '@babel/plugin-syntax-class-properties' - синтаксический анализ новых классов в ES6. 
+  '@babel/plugin-proposal-class-properties' - будет понимать в class префикс static и преобразовывать в ES5
+  пресеты
+  есть пресеты которые содержат в себе некоторые плагины. установив их нужно указывать пресеты 
+  в разделе presets
 
 */  
+/*--------------------------------------------------------------------------*/
 const colors = {
   Reset: "\x1b[0m",
   Bright: "\x1b[1m",
@@ -46,7 +54,7 @@ const colors = {
   }
  };
 
-
+/*-------------------------------------------------------------------*/
 
 gulp.task('nsmpscss', () => {
   return gulp.src([
@@ -106,7 +114,13 @@ gulp.task('default', () => {
         fn: (event, file) => {
          
             gulp.src(file.replace(/\\/g, '/'))
-            .pipe(babel({presets: ['@babel/preset-react','@babel/preset-env']}))//@babel/preset-env в ES5
+            .pipe(babel({
+              presets: ['@babel/preset-react','@babel/preset-env'],
+              plugins: [
+                '@babel/plugin-proposal-class-properties',
+                '@babel/plugin-syntax-class-properties'
+              ]
+            }))//@babel/preset-env в ES5
             .on('error', function(err){
               console.error(`ERROR >> ${err}`);
               this.emit('end');
