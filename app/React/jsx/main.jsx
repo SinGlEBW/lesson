@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 //import Index from './index.jsx'
 
+let name = 'Вася Пупкин';
 
-let name = 15
 
-console.dir(React);
+console.dir(name);
 // //Компонент - это тот шаблон который содержит html код, для дальнейшего рендеринга в ReactDOM 
 // function Welcome(props) {
 //     return <h1>Привет, {props.name}</h1>
