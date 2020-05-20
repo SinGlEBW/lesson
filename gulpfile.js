@@ -5,7 +5,15 @@ const gulp = require('gulp'),
       browserSync = require('browser-sync').create(),
       concat = require('gulp-concat'),
       uglify = require('gulp-uglify'),//ужимает js
-      babel = require('gulp-babel');
+      babel = require('gulp-babel'),
+      browserify = require('browserify'),
+      babelify = require('babelify'),
+      source = require('vinyl-source-stream'),
+      fs = require('fs'),
+      path = require('path');
+
+
+let reactPathJSX = 'app/React/jsx/**.jsx';
 /*### - О BABEL - ###
   Gulp-babel для непосредственно создания таска
 
@@ -19,7 +27,15 @@ const gulp = require('gulp'),
   пресеты
   есть пресеты которые содержат в себе некоторые плагины. установив их нужно указывать пресеты 
   в разделе presets
+  Как я понял ниже плагины просто преобразуют в определёного вида код, но браузер не поймёт его без использования 
+  дополнительных пакетов RequireJS или CommonJS
+  '@babel/plugin-transform-modules-amd' - RequireJS
+  '@babel/plugin-transform-modules-commonjs' - CommonJS стиль NodeJS(кстате '@babel/preset-env' делает тоже самое
+  и весит мегабайты вообщем намного больше. Пока не понял в чём соль  )
 
+  browserify - соединяет JS файлы разбитые на модули. Для этого требуеться главный JS файл который
+  будет подключаться в html
+  
 */  
 /*--------------------------------------------------------------------------*/
 const colors = {
@@ -39,7 +55,7 @@ const colors = {
    Magenta: "\x1b[35m",
    Cyan: "\x1b[36m",
    White: "\x1b[37m",
-   Crimson: "\x1b[38m" //القرمزي
+   Crimson: "\x1b[38m"
   },
   bg: {
    Black: "\x1b[40m",
@@ -76,13 +92,56 @@ gulp.task('smpminjs', () => {
   .pipe(gulp.dest('app/js'))
 })
 
+
+let reactJSX = async function(file){//для работы import в React
+
+  let files = function(){
+    let dir = path.parse(reactPathJSX).dir;
+    let arrNameFile = fs.readdirSync(dir);
+    let arrFullPath = arrNameFile.map((item) => path.join(dir, item))
+
+    return arrFullPath;
+  }
+  
+  let pathFiles = (typeof file == 'string') ? [file] : files();
+  
+  return (
+    await pathFiles.map((items) => {
+    
+    return (
+    browserify([items]).transform( babelify, {
+      presets: ['@babel/preset-react'],//,'@babel/preset-env'
+      plugins: [
+        '@babel/plugin-proposal-class-properties',
+        '@babel/plugin-syntax-class-properties',
+        '@babel/plugin-transform-modules-commonjs'   
+      ]
+    })
+    .bundle()
+    .on('error', function(err){
+      console.error(`ERROR >> ${err}`);
+      this.emit('end');
+    })//При ошибке в js не разорвёт соединение в browserSync
+    .pipe(source(path.parse(items).name))
+    .pipe(rename({extname: '.min.js'}))
+    //.pipe(uglify())//uglify c ES6 не очень ладит. uglify-es больше не поддерживаеться Лучше всех terser работает с ES6+ тоже 
+    .pipe(gulp.dest('app/React/src'))
+    .pipe(browserSync.reload({stream: true})) )
+
+  })) 
+    
+}
+
+/*###--Для отдельного использования тасков--###*/
+gulp.task('reactJSX', reactJSX)
+
 gulp.task('default', () => {
  
   browserSync.init({
     server: { 
       baseDir: "app",
       //index: "/React/index.html",//не работает как ожидалось. ниже параметр startPath
-      directory: false, // показывать список файлов. сам выберу
+      directory: false, // показывает список файлов 
       // serveStaticOptions: {
       //   extensions: ["html"]
       // }
@@ -92,6 +151,7 @@ gulp.task('default', () => {
       'app/**/**/*.html', 
       'app/Lesson/**/*.php',
       'app/js/**/*.js',
+    
       {
         match: ['app/css/scss/**/*.scss'],
         fn: (event, file) => {
@@ -102,34 +162,20 @@ gulp.task('default', () => {
                   overrideBrowserslist: ['last 10 versions'],
                   cascade: false
           }))
+          
           .pipe(rename({suffix: '.min'}))//переменовывает файл. можно и без rename за ранее писать в файле style.min.scss
           .pipe(gulp.dest('app/css'))//куда складывать
           .pipe(browserSync.reload({stream: true}))
           //this.reload()//можно и так
         },
       },
-      
+
       { 
-        match: ['app/React/*.jsx'],
+        match: [reactPathJSX],
         fn: (event, file) => {
-         
-            gulp.src(file.replace(/\\/g, '/'))
-            .pipe(babel({
-              presets: ['@babel/preset-react','@babel/preset-env'],
-              plugins: [
-                '@babel/plugin-proposal-class-properties',
-                '@babel/plugin-syntax-class-properties'
-              ]
-            }))//@babel/preset-env в ES5
-            .on('error', function(err){
-              console.error(`ERROR >> ${err}`);
-              this.emit('end');
-            })//При ошибке в js не разорвёт соединение в browserSync
-            .pipe(rename({suffix: '.min'}))
-            .pipe(uglify())//uglify c ES6 не очень ладит. uglify-es больше не поддерживаеться Лучше всех terser работает с ES6+ тоже 
-            .pipe(gulp.dest('app/React/js'))
-            .pipe(browserSync.reload({stream: true}))
-        
+
+          reactJSX(file)
+       
         }
       }
     ],
@@ -143,10 +189,12 @@ gulp.task('default', () => {
     //   cert: "path-to-custom.crt"
     // },
     //browser: ["google chrome", "firefox"]//какие браузеры открывать
-    startPath: "React/index.html" //можно указать точное местоположение открываемого файла
+    startPath: "React/public/index.html" //можно указать точное местоположение открываемого файла
   
   });
 });
+
+
 
 /* ################---------browser-sync Заменяет это всё----------################ */
 // gulp.task('scss', () => {
@@ -183,7 +231,7 @@ gulp.task('default', () => {
 
 // gulp.task('watch', () => {
 //   gulp.watch('app/css/scss/**/*.scss',gulp.parallel('scss')) //gulp.parallel('scss')
-//   //gulp.watch("app/**/**/*.html",gulp.parallel('html'))//gulp.parallel('html')
+//   gulp.watch("app/**/**/*.html",gulp.parallel('html'))//gulp.parallel('html')
 //   gulp.watch('app/Lesson/**/*.php',gulp.parallel('php'))//gulp.parallel('php')
 //   gulp.watch("app/js/**/*.js",gulp.parallel('js'))//gulp.parallel('js')
 // })
