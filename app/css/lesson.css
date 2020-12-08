@@ -1,0 +1,45 @@
+*,::after,::before{
+    box-sizing: border-box;
+}
+.body-home{
+    background-color: #16171D;
+    color: tomato;
+    border: 1px solid #000;
+ }
+.body-lk{
+    background-color: #202127;
+    color: tomato;
+    border: 1px solid #000;
+}
+.course{
+    margin: 10px 0px 10px 5px;
+    color: tomato;
+}
+a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    vertical-align: center;
+    border: 1px solid #000;
+    
+    background-color: turquoise;
+    text-decoration: none;
+    width: 180px;
+    height: 50px;
+    margin: 10px;
+}
+.container{
+    max-width: 1280px;
+    border: 1px solid #000;
+}
+
+.navigation{
+    width: 100%;
+    border: 1px solid #000;
+}
+
+
+.footer{
+    margin: 30px;
+}

@@ -1,0 +1,36 @@
+{
+    "debug.node.autoAttach": "off",
+    "cSpell.enabled": true,
+    "git.enabled": true,//выключил на этом проекте
+    "liveServer.settings.port": 5502,
+    "problems.autoReveal": false,
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "cSpell.ignoreWords": [
+      "",
+      "backface",
+      "pson",
+      "show",
+      "style",
+      "visibility",
+      "webkit"
+    ],
+    "typeAcquisition": {
+        "include": [
+          "three"
+        ]
+      },
+      "compilerOptions": {
+        "target": "ES6",
+        "module": "es6"
+      },
+      "exclude": [
+        "app/js/OpenGL/THREE/three.min.js",
+        "node_modules"
+      ],
+      "cSpell.words": [
+        "backface",
+        "pson",
+        "visibility",
+        "webkit"
+      ]
+}

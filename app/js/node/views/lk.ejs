@@ -1,0 +1,16 @@
+<?- include('block/header') -?>
+    
+        <?  if(lk){?>
+                <?- include('block/blockLK') -?>
+            <?}else{ ?>
+            <form method="post">
+                <input type="text" name="loginLink">
+                <input type="password" name="passwordLink">
+                <!-- <input type="button" name="butLink" value="Отправить"> -->
+                <button>Отправить</button>
+            </form>
+         <? } ?>
+              
+    <!-- <script type="text/javascript" src="main.js"></script> -->
+</body>
+</html>

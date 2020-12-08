@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>    
+<link rel="stylesheet" href="../css/styleP.css">
+<link rel="stylesheet" href="../css/normalize.css">
+</head>
+<body>
+<!------------------------------------------------------------>
+	
+		<div class="image-container">
+			<div class="image-container__photo-box">
+				<div class="top-block">
+					<h4 class="top-block__title">Ваше фото</h4>
+				</div>
+				<div class="middle-block">
+					<div class="middle-block__image-wraper">
+						
+						<img src="#" alt="" class="middle-block__image" id="js-active">
+						
+						<div class="middle-block__circle" id="js-marker">
+							<div class="circle-item" id="js-resize"></div> 
+						</div>
+					
+					</div>
+				</div>
+				<div class="bottom-block">
+					<div class="bottom-block__btn-wraper">
+						<span class="bottom-block__btn bottom-block__btn--succes">Применить</span>
+						<span class="bottom-block__btn">Отмена</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+<script src="photoRedaktor.js" defer></script>
+
+<!--defer нужен для того что бы заставить загрузиться js после того как загрузились вся HTML страница.
+	
+   <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script> -->
+
+</body>
+</html>

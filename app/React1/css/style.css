@@ -1,0 +1,28 @@
+body{
+    background-color: #16171D;
+    color: darkcyan;
+}
+a{
+    color: tomato;
+}
+.footer__item{
+    border: 1px solid #000;
+    margin-top: 10px;
+    padding-left: 10px;
+}
+form{
+    border: 1px solid #000;
+    margin-top: 10px;
+    width: 300px;
+    padding: 10px;
+}
+h2{
+    color: lightslategrey !important;
+}
+h3{
+    color: palegreen;
+}
+h5{
+    color: tomato;
+    letter-spacing: 5px;
+}

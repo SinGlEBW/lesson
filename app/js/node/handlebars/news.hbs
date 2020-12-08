@@ -1,0 +1,15 @@
+<body class="body-news" style="background-color: #16171D">
+    <div class="course">Дата валюты: {{data}}</div>
+    <div class="course">Localhost PHP: 
+        <ul>SERVER
+         {{#each postData}}
+            <li>{{@key}}: {{this}}</li>
+        {{/each}}
+        </ul>
+    </div>
+    <div class="course">{{post.name}}</div>
+     <form method="POST" enctype="aplication/json">
+        <input type="text" name="name">
+        <input type="submit" value="Получить">
+    </form>
+</body>
