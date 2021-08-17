@@ -46,6 +46,29 @@ let {id = 3, age = 18} = obj2;// назначить значения по умо
 
 console.dir(obj2.age);
 
+//Новый способ передать данные имеющимся переменным
+
+let props1, props2;
+
+if('что-то там'){
+    ({props1, props2} = testFunction({param1, param2, param3}));
+    
+    //вместо такой записи
+    let ob = testFunction({param1, param2, param3});
+    props1 = ob.props1;
+    props2 = ob.props2;   
+}
+
+console.log(props1, props2);//
+
+function testFunction (param1, param2, param3) {
+    //.... абра-кадабра
+    return {props1, props2}
+}
+
+
+
+
 
 function name(...a){//rest - собирает значения в один массив
 
