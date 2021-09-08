@@ -44,6 +44,9 @@ import * as numbers from "местоположение";
 export {sayHi as hi, sayBye as bye};
 //ещё способ export'a по default
 export {sayHi as default};//аналог export default sayHi
+//Вариант когда хочется использовать export без default и при этом экспортируем объект например из функции
+export const { Popup, Button } = CreatePopupTest();//import { Popup, Button } from "./path";
+
 //Реэкспорт. позволяет импортировать что-то и тут же экспортировать, возможно под другим именем
 export { sayHi } from './say.js'; // import из say.js метод sayHi и тут же export
 //import дефолтного значения из /user.js, переименуем его в User и экспортируем и
