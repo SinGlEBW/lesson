@@ -76,9 +76,9 @@ a+ — открыть файл для чтения и записи, устано
     это делает загрузку быстрей.Так же можно куда либо записывать по шагово.
     Это используется на сайтах выдавая пользователю информацию по кусочкам
 */
+let writeableStream = fs.createWriteStream('./test/gg.txt');//поток записи
+let readableStream = fs.createReadStream("hello.txt", "utf8");/*Поток чтения создастся если файл существует, поэтому создаём сначала записи */
 
-let readableStream = fs.createReadStream("hello.txt", "utf8");/*Поток чтения создасться если файл существует*/
-let writeableStream = fs.createWriteStream('./test/gg.txt');
 //далее так читают данные из потока и записывают в поток
 readableStream.on("data", function(chunk){
     writeableStream.write(chunk);
